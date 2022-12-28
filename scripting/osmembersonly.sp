@@ -2,7 +2,7 @@
 #include <sdktools>
 #include <cstrike>
 
-/*
+
 public Plugin myinfo = {
 	name = "OSMembersOnly",
 	author = "Pintuz",
@@ -10,7 +10,7 @@ public Plugin myinfo = {
 	version = "0.01",
 	url = "https://github.com/Pintuzoft/OSMembersOnly"
 }
-*/
+
 /*
 public void OnPluginStart() {
     HookEvent("player_connect", Event_OnPlayerConnect);
