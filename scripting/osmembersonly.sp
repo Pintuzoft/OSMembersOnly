@@ -57,7 +57,7 @@ public void databaseConnect ( ) {
     }
 }
 public bool playerIsReal ( int player ) {
-    return ( IsClientInGame ( player ) &&
+    return ( player > 0 &&
              ! IsClientSourceTV ( player ) );
 }
 public bool stringContains ( char string[32], char match[32] ) {
