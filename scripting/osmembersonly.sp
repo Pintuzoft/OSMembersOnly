@@ -27,6 +27,10 @@ public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroa
     }
     PrintToConsoleAll ( "player_id: %i", player_id );
     int player = GetClientOfUserId ( player_id );
+    if ( ! playerIsReal ( player ) ) {
+        return Plugin_Continue;
+    }
+    
     PrintToConsoleAll ( "player: %i", player );
     char player_authid[32];
     GetClientAuthId ( player, AuthId_Steam2, player_authid, sizeof(player_authid) );
@@ -51,6 +55,10 @@ public void databaseConnect ( ) {
     } else {
         PrintToServer ( "[OSMembersOnly]: Failed to connect to members database! (error: %s)", error );
     }
+}
+public bool playerIsReal ( int player ) {
+    return ( IsClientInGame ( player ) &&
+             ! IsClientSourceTV ( player ) );
 }
 public bool stringContains ( char string[32], char match[32] ) {
     return ( StrContains ( string, match, false ) != -1 );
