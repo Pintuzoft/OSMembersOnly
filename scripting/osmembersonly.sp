@@ -72,7 +72,6 @@ public bool isBot ( char steamid[32] ) {
 public bool IsMember ( char name[64], char steamid[32] ) {
     char buf[32];
     char username[64];
-    char error[255];
     Handle stmt = null;
 
     buf = steamid;
