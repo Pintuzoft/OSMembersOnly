@@ -22,12 +22,12 @@ public void OnPluginStart() {
 /* EVENTS */
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
-    PrintToServer ( "player_id: %i", player_id );
+    PrintToServer ( "player_id: %d", player_id );
     if ( player_id == 0 ) {
         return Plugin_Continue;
     }
     int player = GetClientOfUserId ( player_id );
-    PrintToServer ( "player: %i", player );
+    PrintToServer ( "player: %d", player );
     if ( ! playerIsReal ( player ) ) {
         return Plugin_Continue;
     }
