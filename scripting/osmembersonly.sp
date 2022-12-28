@@ -22,16 +22,16 @@ public void OnPluginStart() {
 /* EVENTS */
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
+    PrintToServer ( "player_id: %i", player_id );
     if ( player_id == 0 ) {
         return Plugin_Continue;
     }
-    PrintToServer ( "player_id: %i", player_id );
     int player = GetClientOfUserId ( player_id );
+    PrintToServer ( "player: %i", player );
     if ( ! playerIsReal ( player ) ) {
         return Plugin_Continue;
     }
     
-    PrintToServer ( "player: %i", player );
     char player_authid[32];
     GetClientAuthId ( player, AuthId_Steam2, player_authid, sizeof(player_authid) );
     PrintToServer ( "player_authid: %s", player_authid );
