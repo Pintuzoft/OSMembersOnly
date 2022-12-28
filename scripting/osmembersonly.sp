@@ -42,14 +42,14 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     
     PrintToServer ( "steamid: %s", steamid );
 
-    if(StrEqual(steamid, "") || StrEqual(steamid, "STEAM_ID_PENDING") || StrEqual(steamid, "STEAM_ID_STOP_IGNORING_RETVALS")) {
+    if( invalidSteamID ( steamid ) ) {
         char kickReason[255];
-        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
+        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nInvalid SteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
-  //  if ( ! IsMember ( player_authid ) ) {
-  //      KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
-  //  }
+    //if ( ! IsMember ( steamid ) ) {
+    //    KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
+    //}
     
     return Plugin_Handled;
 }
@@ -57,8 +57,15 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
 public bool IsMember ( char steamid[32] ) {
     ReplaceString ( steamid, sizeof(steamid), "STEAM_0:", "" );
     ReplaceString ( steamid, sizeof(steamid), "STEAM_1:", "" );
-    PrintToConsoleAll ( "steamid: %s", steamid );
+    PrintToServer ( "steamid: %s", steamid );
     return true;
+}
+
+public bool invalidSteamID ( char steamid[32] ) {
+    if ( StrEqual( steamid, "" ) || StrEqual( steamid, "STEAM_ID_PENDING" ) || StrEqual( steamid, "STEAM_ID_STOP_IGNORING_RETVALS" ) ) {
+        return true;
+    }
+    return false;
 }
 
 public void databaseConnect ( ) {
