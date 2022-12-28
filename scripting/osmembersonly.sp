@@ -44,7 +44,7 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
 
     if(StrEqual(steamid, "") || StrEqual(steamid, "STEAM_ID_PENDING") || StrEqual(steamid, "STEAM_ID_STOP_IGNORING_RETVALS")) {
         char kickReason[255];
-        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\n\nmake sure you are registered and have a valid steamid set on your profile\n\nSteamID found: %s", steamid );
+        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
   //  if ( ! IsMember ( player_authid ) ) {
