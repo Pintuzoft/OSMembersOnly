@@ -80,7 +80,9 @@ public bool IsMember ( char name[64], char steamid[32] ) {
 
     databaseConnect ( );
     
-    if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM members WHERE steamid like ?", error, sizeof(error) ) ) == null ) {
+    PrintToServer ( "buf: %s", buf );
+
+    if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM user WHERE steamid like ?", error, sizeof(error) ) ) == null ) {
         SQL_GetError ( membersonly, error, sizeof(error) );
         PrintToServer("[OSMembersOnly]: Failed to query[0x01] (error: %s)", error);
         return false;
