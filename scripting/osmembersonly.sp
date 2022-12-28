@@ -50,12 +50,12 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     }
 
     if( invalidSteamID ( steamid ) ) {
-        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nInvalid SteamID found:\n%s", steamid );
+        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nInvalid SteamID found:\n%s\n\n./OldSwedes", steamid );
         KickClient ( player, kickReason );
     }
 
     if ( ! IsMember ( name, steamid ) ) {
-        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
+        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s\n\n./OldSwedes", steamid );
         KickClient ( player, kickReason );
     }
     CloseHandle ( timer );
@@ -78,7 +78,7 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     buf = steamid;
     ReplaceString ( buf, sizeof(buf), "STEAM_0:", "%" );
     ReplaceString ( buf, sizeof(buf), "STEAM_1:", "%" );
-    
+
     databaseConnect ( );
     
     if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM members WHERE steamid like ?", error, sizeof(error) ) ) == null ) {
@@ -86,6 +86,7 @@ public bool IsMember ( char name[64], char steamid[32] ) {
         PrintToServer("[OSMembersOnly]: Failed to query[0x01] (error: %s)", error);
         return false;
     }
+    SQL_BindParamString ( stmt, 0, buf, false );
     if ( ! SQL_Execute ( stmt ) ) {
         SQL_GetError ( membersonly, error, sizeof(error) );
         PrintToServer("[OSMembersOnly]: Failed to execute[0x02] (error: %s)", error);
@@ -113,7 +114,7 @@ public bool invalidSteamID ( char steamid[32] ) {
 
 public void databaseConnect ( ) {
     if ( ( membersonly = SQL_Connect ( "membersonly", true, error, sizeof(error) ) ) != null ) {
-        PrintToServer ( "[OSMembersOnly]: Connected to knivhelg database!" );
+        PrintToServer ( "[OSMembersOnly]: Connected to members database!" );
     } else {
         PrintToServer ( "[OSMembersOnly]: Failed to connect to members database! (error: %s)", error );
     }
