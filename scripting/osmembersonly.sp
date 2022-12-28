@@ -43,16 +43,28 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     
     PrintToServer ( "steamid: %s", steamid );
 
+    if ( isBot ( steamid ) ) {
+        return Plugin_Continue;
+    }
+
     if( invalidSteamID ( steamid ) ) {
         Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nInvalid SteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
+
     if ( ! IsMember ( steamid ) ) {
         Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
     
     return Plugin_Handled;
+}
+
+public bool isBot ( char steamid[32] ) {
+    if ( stringContains ( steamid, "BOT" ) ) {
+        return true;
+    }
+    return false;
 }
 
 public bool IsMember ( char steamid[32] ) {
