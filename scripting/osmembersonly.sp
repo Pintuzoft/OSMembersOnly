@@ -37,9 +37,14 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
         return Plugin_Continue;
     }
     
-    char player_authid[32];
-    GetClientAuthId ( player, AuthId_Steam2, player_authid, sizeof(player_authid) );
-    PrintToServer ( "player_authid: %s", player_authid );
+    char steamid[32];
+    GetClientAuthId ( player, AuthId_Steam2, steamid, sizeof(steamid) );
+    
+    PrintToServer ( "steamid: %s", steamid );
+
+    if(StrEqual(steamid, "") || StrEqual(steamid, "STEAM_ID_PENDING") || StrEqual(steamid, "STEAM_ID_STOP_IGNORING_RETVALS")) {
+        KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
+    }
   //  if ( ! IsMember ( player_authid ) ) {
   //      KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
   //  }
