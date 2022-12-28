@@ -76,12 +76,12 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     Handle stmt = null;
 
     buf = steamid;
-    ReplaceString ( buf, sizeof(buf), "STEAM_0:", "" );
-    ReplaceString ( buf, sizeof(buf), "STEAM_1:", "" );
-
+    ReplaceString ( buf, sizeof(buf), "STEAM_0:", "%" );
+    ReplaceString ( buf, sizeof(buf), "STEAM_1:", "%" );
+    
     databaseConnect ( );
     
-    if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM members WHERE steamid = ?", error, sizeof(error) ) ) == null ) {
+    if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM members WHERE steamid like ?", error, sizeof(error) ) ) == null ) {
         SQL_GetError ( membersonly, error, sizeof(error) );
         PrintToServer("[OSMembersOnly]: Failed to query[0x01] (error: %s)", error);
         return false;
