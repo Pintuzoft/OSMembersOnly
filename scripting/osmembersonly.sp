@@ -23,7 +23,7 @@ public void OnPluginStart() {
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
     PrintToServer ( "player_id: %d", player_id );
-    CreateTimer ( 0.5, handleNewPlayer, player_id );
+    CreateTimer ( 0.1, handleNewPlayer, player_id );
     
     return Plugin_Handled;
 }
