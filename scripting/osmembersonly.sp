@@ -23,9 +23,14 @@ public void OnPluginStart() {
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
     PrintToServer ( "player_id: %d", player_id );
-    if ( player_id == 0 ) {
-        return Plugin_Continue;
-    }
+    CreateTimer ( 0.5, handleNewPlayer, player_id );
+    
+    return Plugin_Handled;
+}
+
+/* FUNCTIONS */
+
+public Action handleNewPlayer ( Handle timer, int player_id ) {
     int player = GetClientOfUserId ( player_id );
     PrintToServer ( "player: %d", player );
     if ( ! playerIsReal ( player ) ) {
@@ -38,10 +43,10 @@ public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroa
   //  if ( ! IsMember ( player_authid ) ) {
   //      KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
   //  }
+    
     return Plugin_Handled;
 }
 
-/* FUNCTIONS */
 public bool IsMember ( char steamid[32] ) {
     ReplaceString ( steamid, sizeof(steamid), "STEAM_0:", "" );
     ReplaceString ( steamid, sizeof(steamid), "STEAM_1:", "" );
