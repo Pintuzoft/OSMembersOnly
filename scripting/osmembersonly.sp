@@ -23,7 +23,7 @@ public void OnPluginStart() {
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
     PrintToServer ( "player_id: %d", player_id );
-    CreateTimer ( 0.1, handleNewPlayer, player_id );
+    CreateTimer ( 0.5, handleNewPlayer, player_id );
     
     return Plugin_Handled;
 }
@@ -31,6 +31,7 @@ public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroa
 /* FUNCTIONS */
 
 public Action handleNewPlayer ( Handle timer, int player_id ) {
+    char kickReason[255];
     int player = GetClientOfUserId ( player_id );
     PrintToServer ( "player: %d", player );
     if ( ! playerIsReal ( player ) ) {
@@ -43,13 +44,13 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     PrintToServer ( "steamid: %s", steamid );
 
     if( invalidSteamID ( steamid ) ) {
-        char kickReason[255];
         Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nInvalid SteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
-    //if ( ! IsMember ( steamid ) ) {
-    //    KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
-    //}
+    if ( ! IsMember ( steamid ) ) {
+        Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
+        KickClient ( player, kickReason );
+    }
     
     return Plugin_Handled;
 }
@@ -58,7 +59,7 @@ public bool IsMember ( char steamid[32] ) {
     ReplaceString ( steamid, sizeof(steamid), "STEAM_0:", "" );
     ReplaceString ( steamid, sizeof(steamid), "STEAM_1:", "" );
     PrintToServer ( "steamid: %s", steamid );
-    return true;
+    return false;
 }
 
 public bool invalidSteamID ( char steamid[32] ) {
