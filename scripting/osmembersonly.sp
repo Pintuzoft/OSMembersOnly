@@ -38,7 +38,9 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
         return Plugin_Continue;
     }
     
+    char name[64];
     char steamid[32];
+    GetClientName ( player, name, sizeof(name) );
     GetClientAuthId ( player, AuthId_Steam2, steamid, sizeof(steamid) );
     
     PrintToServer ( "steamid: %s", steamid );
@@ -52,11 +54,11 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
         KickClient ( player, kickReason );
     }
 
-    if ( ! IsMember ( steamid ) ) {
+    if ( ! IsMember ( name, steamid ) ) {
         Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s", steamid );
         KickClient ( player, kickReason );
     }
-    
+    CloseHandle ( timer );
     return Plugin_Handled;
 }
 
@@ -67,13 +69,39 @@ public bool isBot ( char steamid[32] ) {
     return false;
 }
 
-public bool IsMember ( char steamid[32] ) {
+public bool IsMember ( char name[64], char steamid[32] ) {
     char buf[32];
+    char username[64];
+    char error[255];
+    Handle stmt = null;
+
     buf = steamid;
     ReplaceString ( buf, sizeof(buf), "STEAM_0:", "" );
     ReplaceString ( buf, sizeof(buf), "STEAM_1:", "" );
-    PrintToServer ( "steamid: %s", buf );
-    return false;
+
+    databaseConnect ( );
+    
+    if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM members WHERE steamid = ?", error, sizeof(error) ) ) == null ) {
+        SQL_GetError ( membersonly, error, sizeof(error) );
+        PrintToServer("[OSMembersOnly]: Failed to query[0x01] (error: %s)", error);
+        return false;
+    }
+    if ( ! SQL_Execute ( stmt ) ) {
+        SQL_GetError ( membersonly, error, sizeof(error) );
+        PrintToServer("[OSMembersOnly]: Failed to execute[0x02] (error: %s)", error);
+        return false;
+    }
+    if ( ! SQL_FetchRow ( stmt ) ) {
+        SQL_GetError ( membersonly, error, sizeof(error) );
+        PrintToServer ( "[OSMembersOnly]: Failed to fetch[0x03] (error: %s)", error );
+        return false;
+    }
+    
+    SQL_FetchString ( stmt, 0, username, sizeof(username) );
+    PrintToChatAll ( "[OSMembersOnly]: player connected: %s (%s)", name, username );
+    
+
+    return true;
 }
 
 public bool invalidSteamID ( char steamid[32] ) {
