@@ -1,5 +1,5 @@
 {
-    "sourcepawn.MainPath": "/workspaces/OSMembersOnly/scripting/osautobalance.sp",
+    "sourcepawn.MainPath": "/workspaces/OSMembersOnly/scripting/osmembersonly.sp",
     "sourcepawn.SourcemodHome": "/home/codespace/sourcemodAPI/addons/sourcemod/scripting/include",
     "sourcepawn.SpcompPath": "/home/codespace/sourcemodAPI/addons/sourcemod/scripting/spcomp",
     "sourcepawnLanguageServer.sourcemod_home": "/home/codespace/sourcemodAPI/addons/sourcemod/scripting/include"
