@@ -22,16 +22,19 @@ public void OnPluginStart() {
 /* EVENTS */
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
+    if ( player_id == 0 ) {
+        return Plugin_Continue;
+    }
     PrintToConsoleAll ( "player_id: %i", player_id );
     int player = GetClientOfUserId ( player_id );
     PrintToConsoleAll ( "player: %i", player );
     char player_authid[32];
     GetClientAuthId ( player, AuthId_Steam2, player_authid, sizeof(player_authid) );
     PrintToConsoleAll ( "player_authid: %s", player_authid );
-    if ( ! IsMember ( player_authid ) ) {
-        KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
-    }
-    return Plugin_Continue;
+  //  if ( ! IsMember ( player_authid ) ) {
+  //      KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
+  //  }
+    return Plugin_Handled;
 }
 
 /* FUNCTIONS */
