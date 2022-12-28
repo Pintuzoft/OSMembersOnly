@@ -68,9 +68,11 @@ public bool isBot ( char steamid[32] ) {
 }
 
 public bool IsMember ( char steamid[32] ) {
-    ReplaceString ( steamid, sizeof(steamid), "STEAM_0:", "" );
-    ReplaceString ( steamid, sizeof(steamid), "STEAM_1:", "" );
-    PrintToServer ( "steamid: %s", steamid );
+    char buf[32];
+    buf = steamid;
+    ReplaceString ( buf, sizeof(buf), "STEAM_0:", "" );
+    ReplaceString ( buf, sizeof(buf), "STEAM_1:", "" );
+    PrintToServer ( "steamid: %s", buf );
     return false;
 }
 
