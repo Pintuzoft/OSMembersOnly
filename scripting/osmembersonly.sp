@@ -43,7 +43,7 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     PrintToServer ( "steamid: %s", steamid );
 
     if(StrEqual(steamid, "") || StrEqual(steamid, "STEAM_ID_PENDING") || StrEqual(steamid, "STEAM_ID_STOP_IGNORING_RETVALS")) {
-        KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
+        KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile. SteamID found: %s", steamid );
     }
   //  if ( ! IsMember ( player_authid ) ) {
   //      KickClient ( player, "You are not recognized as a member of OldSwedes!, make sure you are registered and have a valid steamid set on your profile." );
