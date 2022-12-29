@@ -33,7 +33,7 @@ public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroa
 public Action handleNewPlayer ( Handle timer, int player_id ) {
     char kickReason[255];
     int player = GetClientOfUserId ( player_id );
-    PrintToServer ( "player: %d", player );
+
     if ( ! playerIsReal ( player ) ) {
         return Plugin_Continue;
     }
@@ -42,8 +42,6 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
     char steamid[32];
     GetClientName ( player, name, sizeof(name) );
     GetClientAuthId ( player, AuthId_Steam2, steamid, sizeof(steamid) );
-    
-    PrintToServer ( "steamid: %s", steamid );
 
     if ( isBot ( steamid ) ) {
         return Plugin_Continue;
@@ -106,6 +104,7 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     char message[255];
     Format ( message, sizeof(message), "[OSMembersOnly]: player connected: %s (Member: %s)", name, username );
     PrintToChatAll ( message );
+    PrintToServer ( message );
     return true;
 }
 
