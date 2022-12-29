@@ -23,7 +23,7 @@ public void OnPluginStart() {
 public Action Event_PlayerConnect(Handle event, const char[] name, bool dontBroadcast) {
     int player_id = GetEventInt ( event, "userid" );
     PrintToServer ( "player_id: %d", player_id );
-    CreateTimer ( 0.5, handleNewPlayer, player_id );
+    CreateTimer ( 1.0, handleNewPlayer, player_id );
     
     return Plugin_Handled;
 }
@@ -58,7 +58,6 @@ public Action handleNewPlayer ( Handle timer, int player_id ) {
         Format ( kickReason, sizeof(kickReason), "You are not recognized as a member of OldSwedes!\nMake sure you are registered on oldswedes.se and have a valid SteamID set on your profile\n\nSteamID found:\n%s\n\n./OldSwedes", steamid );
         KickClient ( player, kickReason );
     }
-    CloseHandle ( timer );
     return Plugin_Handled;
 }
 
@@ -72,6 +71,7 @@ public bool isBot ( char steamid[32] ) {
 public bool IsMember ( char name[64], char steamid[32] ) {
     char buf[32];
     char username[64];
+    
     Handle stmt = null;
 
     buf = steamid;
@@ -79,8 +79,6 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     ReplaceString ( buf, sizeof(buf), "STEAM_1:", "%" );
 
     databaseConnect ( );
-    
-    PrintToServer ( "buf: %s", buf );
 
     if ( ( stmt = SQL_PrepareQuery ( membersonly, "SELECT name FROM user WHERE steamid like ?", error, sizeof(error) ) ) == null ) {
         SQL_GetError ( membersonly, error, sizeof(error) );
@@ -100,11 +98,17 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     }
     
     SQL_FetchString ( stmt, 0, username, sizeof(username) );
-    PrintToChatAll ( "[OSMembersOnly]: player connected: %s (%s)", name, username );
     
+    if ( stmt != null ) {
+        delete stmt;
+    }
 
+    char message[255];
+    Format ( message, sizeof(message), "[OSMembersOnly]: player connected: %s (Member: %s)", name, username );
+    PrintToChatAll ( message );
     return true;
 }
+
 
 public bool invalidSteamID ( char steamid[32] ) {
     if ( StrEqual( steamid, "" ) || StrEqual( steamid, "STEAM_ID_PENDING" ) || StrEqual( steamid, "STEAM_ID_STOP_IGNORING_RETVALS" ) ) {
