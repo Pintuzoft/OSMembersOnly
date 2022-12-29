@@ -100,7 +100,7 @@ public bool IsMember ( char name[64], char steamid[32] ) {
     }
 
     char message[255];
-    Format ( message, sizeof(message), "[OSMembersOnly]: player connected: %s (Member: %s)", name, username );
+    Format ( message, sizeof(message), "[OSMembersOnly]: %s (Member: %s) connected", name, username );
     PrintToChatAll ( message );
     PrintToServer ( message );
     return true;
